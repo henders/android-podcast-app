@@ -25,9 +25,13 @@ public class DummyContent {
 
     static {
         // Add 3 sample items.
-        addItem(new DummyItem("1", "Item 1"));
-        addItem(new DummyItem("2", "Item 2"));
-        addItem(new DummyItem("3", "Item 3"));
+        addItem(new DummyItem("1", "Bulletproof Monk"));
+        addItem(new DummyItem("2", "The 404 Show"));
+        addItem(new DummyItem("3", "The Fat-Burning Man show by Abel Someone"));
+        addItem(new DummyItem("4", "The RPG Academy"));
+        addItem(new DummyItem("5", "The Woodwhisperer"));
+        addItem(new DummyItem("6", "This week in tech"));
+        addItem(new DummyItem("7", "Wood Talk"));
     }
 
     private static void addItem(DummyItem item) {
