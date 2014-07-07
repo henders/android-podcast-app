@@ -3,6 +3,8 @@ package com.example.podcastplayer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 
 /**
@@ -35,6 +37,8 @@ public class PodcastListActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast_list);
 
+    	System.out.println("onCreate entered");
+
         if (findViewById(R.id.podcast_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -52,6 +56,10 @@ public class PodcastListActivity extends FragmentActivity
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	System.out.println("onCreateOptionsMenu entered");
+    }
+    
     /**
      * Callback method from {@link PodcastListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
