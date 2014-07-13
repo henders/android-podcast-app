@@ -1,10 +1,16 @@
 package com.example.podcastplayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.podcastplayer.dummy.DummyContent;
@@ -51,9 +57,31 @@ public class PodcastDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_podcast_detail, container, false);
 
+        Log.i("PodcastDetail", "Creating detail view for item: " + mItem.toString());
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.podcast_detail)).setText(mItem.name);
+        	ArrayList<String> newList = new ArrayList<String>();
+        	for (EpisodeItem episode : mItem.episodes) {
+                Log.i("PodcastDetail", "Adding episode for item: " + episode.name);
+				newList.add(episode.name);
+			}
+            Log.i("PodcastDetail", "Setting arraylist for listview");
+        	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
+        	        android.R.layout.simple_list_item_1, newList);
+            Log.i("PodcastDetail", "Created arrayadapter");
+            ListView list = ((ListView) rootView.findViewById(R.id.detailListView));
+            if (list != null) {
+                Log.i("PodcastDetail", "found listview in detail screen: " + list.toString());            	
+            }
+            else {
+                Log.i("PodcastDetail", "Failed to find listview item in detail list view");
+                return rootView;
+            }
+            list.setAdapter(adapter);
+            Log.i("PodcastDetail", "Set adapter for listview");
+
+            Log.i("PodcastDetail", "Done creating detail view");
+//            ((TextView) rootView.findViewById(R.id.podcast_detail)).setText(mItem.name);
         }
 
         return rootView;

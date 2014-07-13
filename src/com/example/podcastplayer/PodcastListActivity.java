@@ -10,6 +10,7 @@ import java.net.URLConnection;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -83,8 +84,23 @@ public class PodcastListActivity extends FragmentActivity
     	Log.i("ListActivity", "Selected menu item: " + item.toString());
 //    	AddRssDialogFragment rssDialog = new AddRssDialogFragment();
 //    	rssDialog.show(getFragmentManager(), "dialog");
-    	
-    	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    	if (item.toString() == "Add RSS") {
+        	addRSSMenuClicked();
+    	}
+    	else if (item.toString().equals("Play")) {
+    		playMenuClicked();
+    	}
+    	return true;
+    }
+
+	private void playMenuClicked() {
+		Log.i("ListActivity", "Playing media....");
+		MediaPlayer player = MediaPlayer.create(getApplicationContext(), R.raw.test);
+		player.start();
+	}
+
+	private void addRSSMenuClicked() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
     	alert.setTitle("Enter the RSS URL below:");
 
@@ -109,8 +125,7 @@ public class PodcastListActivity extends FragmentActivity
     	});
 
     	alert.show();
-    	return true;
-    }
+	}
     
     /**
      * Callback method from {@link PodcastListFragment.Callbacks}
