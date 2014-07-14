@@ -69,7 +69,7 @@ public class PodcastDetailFragment extends Fragment {
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
         	        android.R.layout.simple_list_item_1, newList);
             Log.i("PodcastDetail", "Created arrayadapter");
-            ListView list = ((ListView) rootView.findViewById(R.id.detailListView));
+            ListView list = ((ListView) rootView.findViewById(R.id.episodeListView));
             if (list != null) {
                 Log.i("PodcastDetail", "found listview in detail screen: " + list.toString());            	
             }

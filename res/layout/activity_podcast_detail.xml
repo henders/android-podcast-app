@@ -6,23 +6,4 @@
     tools:context=".PodcastDetailActivity"
     tools:ignore="MergeRootFrame" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <ListView
-            android:id="@+id/detailListView"
-            android:layout_width="match_parent"
-            android:layout_height="362dp" >
-        </ListView>
-
-        <MediaController
-            android:id="@+id/mediaController1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.27" >
-        </MediaController>
-    </LinearLayout>
-
 </FrameLayout>
