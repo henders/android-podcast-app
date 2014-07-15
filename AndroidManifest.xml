@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.podcastplayer.PodcastDetailActivity"
+            android:name="com.example.podcastplayer.EpisodeDetailActivity"
             android:label="@string/title_podcast_detail"
             android:parentActivityName=".PodcastListActivity" >
             <meta-data

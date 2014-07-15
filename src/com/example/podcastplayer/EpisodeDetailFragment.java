@@ -20,10 +20,10 @@ import com.example.podcastplayer.dummy.DummyContent;
 /**
  * A fragment representing a single Podcast detail screen.
  * This fragment is either contained in a {@link PodcastListActivity}
- * in two-pane mode (on tablets) or a {@link PodcastDetailActivity}
+ * in two-pane mode (on tablets) or a {@link EpisodeDetailActivity}
  * on handsets.
  */
-public class PodcastDetailFragment extends Fragment {
+public class EpisodeDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -39,7 +39,7 @@ public class PodcastDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PodcastDetailFragment() {
+    public EpisodeDetailFragment() {
     }
 
     @Override
@@ -62,11 +62,24 @@ public class PodcastDetailFragment extends Fragment {
         Log.i("PodcastDetail", "Creating detail view for item: " + mItem.toString());
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
+        	
+        	/*
         	ArrayList<String> newList = new ArrayList<String>();
         	for (EpisodeItem episode : mItem.episodes) {
                 Log.i("PodcastDetail", "Adding episode for item: " + episode.name);
 				newList.add(episode.name);
+				newList.add("test");
+			}*/
+        	
+        	//mItem.feedUrl
+        	
+        	ArrayList<String> newList = new ArrayList<String>();
+        	for (EpisodeItem episode : mItem.episodes) {
+                Log.i("PodcastDetail", "Adding episode for item: " + episode.name);
+				newList.add(episode.name);
+				newList.add("test");
 			}
+        	
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
         	        android.R.layout.simple_list_item_1, newList);
             ListView list = ((ListView) rootView.findViewById(R.id.episodeListView));

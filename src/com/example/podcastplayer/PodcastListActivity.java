@@ -28,13 +28,13 @@ import android.widget.Toast;
  * An activity representing a list of Podcasts. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link PodcastDetailActivity} representing
+ * lead to a {@link EpisodeDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  * <p>
  * The activity makes heavy use of fragments. The list of items is a
  * {@link PodcastListFragment} and the item details
- * (if present) is a {@link PodcastDetailFragment}.
+ * (if present) is a {@link EpisodeDetailFragment}.
  * <p>
  * This activity also implements the required
  * {@link PodcastListFragment.Callbacks} interface
@@ -138,8 +138,8 @@ public class PodcastListActivity extends FragmentActivity
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(PodcastDetailFragment.ARG_ITEM_ID, id);
-            PodcastDetailFragment fragment = new PodcastDetailFragment();
+            arguments.putString(EpisodeDetailFragment.ARG_ITEM_ID, id);
+            EpisodeDetailFragment fragment = new EpisodeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.podcast_detail_container, fragment)
@@ -148,8 +148,8 @@ public class PodcastListActivity extends FragmentActivity
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, PodcastDetailActivity.class);
-            detailIntent.putExtra(PodcastDetailFragment.ARG_ITEM_ID, id);
+            Intent detailIntent = new Intent(this, EpisodeDetailActivity.class);
+            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
     }

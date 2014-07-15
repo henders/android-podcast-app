@@ -13,9 +13,9 @@ import android.view.MenuItem;
  * in a {@link PodcastListActivity}.
  * <p>
  * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link PodcastDetailFragment}.
+ * more than a {@link EpisodeDetailFragment}.
  */
-public class PodcastDetailActivity extends FragmentActivity {
+public class EpisodeDetailActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +38,9 @@ public class PodcastDetailActivity extends FragmentActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(PodcastDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(PodcastDetailFragment.ARG_ITEM_ID));
-            PodcastDetailFragment fragment = new PodcastDetailFragment();
+            arguments.putString(EpisodeDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(EpisodeDetailFragment.ARG_ITEM_ID));
+            EpisodeDetailFragment fragment = new EpisodeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.podcast_detail_container, fragment)

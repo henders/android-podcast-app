@@ -23,7 +23,7 @@ import com.example.podcastplayer.dummy.DummyContent;
  * A list fragment representing a list of Podcasts. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link PodcastDetailFragment}.
+ * currently being viewed in a {@link EpisodeDetailFragment}.
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
