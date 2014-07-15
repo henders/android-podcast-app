@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,23 +67,17 @@ public class PodcastDetailFragment extends Fragment {
                 Log.i("PodcastDetail", "Adding episode for item: " + episode.name);
 				newList.add(episode.name);
 			}
-            Log.i("PodcastDetail", "Setting arraylist for listview");
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
         	        android.R.layout.simple_list_item_1, newList);
-            Log.i("PodcastDetail", "Created arrayadapter");
             ListView list = ((ListView) rootView.findViewById(R.id.episodeListView));
-            if (list != null) {
-                Log.i("PodcastDetail", "found listview in detail screen: " + list.toString());            	
-            }
-            else {
-                Log.i("PodcastDetail", "Failed to find listview item in detail list view");
-                return rootView;
-            }
             list.setAdapter(adapter);
-            Log.i("PodcastDetail", "Set adapter for listview");
-
+            list.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Log.i("", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
+				}
+			});
             Log.i("PodcastDetail", "Done creating detail view");
-//            ((TextView) rootView.findViewById(R.id.podcast_detail)).setText(mItem.name);
         }
 
         return rootView;

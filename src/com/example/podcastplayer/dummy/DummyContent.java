@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.podcastplayer.EpisodeItem;
 import com.example.podcastplayer.PodcastItem;
 
 /**
@@ -27,13 +28,52 @@ public class DummyContent {
 
     static {
         // Add 3 sample items.
-        addItem(new PodcastItem("1", "Bulletproof Monk", "", ""));
-        addItem(new PodcastItem("2", "The 404 Show", "", ""));
-        addItem(new PodcastItem("3", "The Fat-Burning Man show by Abel Someone", "", ""));
-        addItem(new PodcastItem("4", "The RPG Academy", "", ""));
-        addItem(new PodcastItem("5", "The Woodwhisperer", "", ""));
-        addItem(new PodcastItem("6", "This week in tech", "", ""));
-        addItem(new PodcastItem("7", "Wood Talk", "", ""));
+    	PodcastItem item = new PodcastItem("1", "Bulletproof Monk", "http://foo", "This is a shortish description for this podcast");
+    	EpisodeItem episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 3: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 4: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	addItem(item);
+
+    	item = new PodcastItem("2", "The 404 Show", "http://foo", "This is a shortish description for this podcast");
+    	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 3: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	addItem(item);
+
+    	item = new PodcastItem("3", "The Fat-Burning Man show by Abel Someone", "http://foo", "This is a shortish description for this podcast");
+    	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 3: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	addItem(item);
+
+    	item = new PodcastItem("4", "The RPG Academy", "http://foo", "This is a shortish description for this podcast");
+    	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 3: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	addItem(item);
+
+    	item = new PodcastItem("5", "The Woodwhisperer", "http://foo", "This is a shortish description for this podcast");
+    	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	episode = new EpisodeItem("Ep 3: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
+    	item.episodes.add(episode);
+    	addItem(item);
     }
 
     private static void addItem(PodcastItem item) {

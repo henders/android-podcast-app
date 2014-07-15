@@ -20,10 +20,6 @@ public class PodcastItem {
 		this.feedUrl = feedUrl;
 		this.description = description;
 		this.episodes = new ArrayList<EpisodeItem>();
-		this.episodes.add(new EpisodeItem("test0", "desc", "file"));
-		this.episodes.add(new EpisodeItem("test1", "desc", "file"));
-		this.episodes.add(new EpisodeItem("test2", "desc", "file"));
-		this.episodes.add(new EpisodeItem("test3", "desc", "file"));
 	}
 	
     @Override
