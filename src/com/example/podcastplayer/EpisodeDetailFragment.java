@@ -3,6 +3,7 @@ package com.example.podcastplayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -88,6 +89,9 @@ public class EpisodeDetailFragment extends Fragment {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Log.i("", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
+		            Intent detailIntent = new Intent(getActivity(), PodcastPlayerActivity.class);
+		            detailIntent.putExtra(PodcastDetailFragment.ARG_ITEM_ID, id);
+		            startActivity(detailIntent);
 				}
 			});
             Log.i("PodcastDetail", "Done creating detail view");
