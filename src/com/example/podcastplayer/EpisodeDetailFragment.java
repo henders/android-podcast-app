@@ -90,7 +90,7 @@ public class EpisodeDetailFragment extends Fragment {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Log.i("", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
 		            Intent detailIntent = new Intent(getActivity(), PodcastPlayerActivity.class);
-		            detailIntent.putExtra(PodcastDetailFragment.ARG_ITEM_ID, id);
+		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, id);
 		            startActivity(detailIntent);
 				}
 			});
