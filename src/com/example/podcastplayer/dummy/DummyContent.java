@@ -28,7 +28,7 @@ public class DummyContent {
 
     static {
         // Add 3 sample items.
-    	PodcastItem item = new PodcastItem("1", "The Bulletproof Executive", "www.bulletproofexec.com/category/podcasts/xs", "This is a shortish description for this podcast");
+    	PodcastItem item = new PodcastItem("1", "The Bulletproof Executive", "http://www.bulletproofexec.com/category/podcasts/feed/", "This is a shortish description for this podcast");
     	EpisodeItem episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
     	item.episodes.add(episode);
     	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
@@ -39,7 +39,7 @@ public class DummyContent {
     	item.episodes.add(episode);
     	addItem(item);
 
-    	item = new PodcastItem("2", "The 404", "feeds2.feedburner.com/the404/", "This is a shortish description for this podcast");
+    	item = new PodcastItem("2", "The 404", "http://feeds2.feedburner.com/the404/", "This is a shortish description for this podcast");
     	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
     	item.episodes.add(episode);
     	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
@@ -48,7 +48,7 @@ public class DummyContent {
     	item.episodes.add(episode);
     	addItem(item);
 
-    	item = new PodcastItem("3", "The Fat-Burning Man show by Abel Someone", "http://fatburningman.com/tag/podcast/", "This is a shortish description for this podcast");
+    	item = new PodcastItem("3", "Fat-Burning Man", "http://fatburningman.com/feed", "This is a shortish description for this podcast");
     	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
     	item.episodes.add(episode);
     	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
@@ -57,7 +57,7 @@ public class DummyContent {
     	item.episodes.add(episode);
     	addItem(item);
 
-    	item = new PodcastItem("4", "The RPG Academy", "feed://therpgacademy.com/feed/podcast/", "This is a shortish description for this podcast");
+    	item = new PodcastItem("4", "The RPG Academy", "http://therpgacademy.com/feed/podcast/", "This is a shortish description for this podcast");
     	episode = new EpisodeItem("Ep 1: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");
     	item.episodes.add(episode);
     	episode = new EpisodeItem("Ep 2: The return", "this is a description for an episode,  should be shortish", "/filepath/for/episode");

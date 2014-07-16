@@ -60,26 +60,38 @@ public class EpisodeDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_podcast_detail, container, false);
 
-        Log.i("PodcastDetail", "Creating detail view for item: " + mItem.toString());
+        Log.i("EpisodeDetailFragment", "Creating detail view for item: " + mItem.toString());
+        Log.i("EpisodeDetailFragment", "URL: " + mItem.feedUrl.toString());
+        
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-        	
-        	/*
-        	ArrayList<String> newList = new ArrayList<String>();
-        	for (EpisodeItem episode : mItem.episodes) {
-                Log.i("PodcastDetail", "Adding episode for item: " + episode.name);
-				newList.add(episode.name);
-				newList.add("test");
-			}*/
+        if (mItem != null) {        	
         	
         	//mItem.feedUrl
+            Log.i("EpisodeDetailFragment", "Creating parser with URL: " + mItem.feedUrl);        	
+        	Parser parser = new Parser(mItem.feedUrl);
+
+            Log.i("EpisodeDetailFragment", "Parsing feed...");         	
+        	parser.Parse();
         	
+        	try{
+        		// wait for the parsing thread
+        		while(0 == parser.mState.get())
+        			Thread.sleep(1000);
+        		
+        	}catch(Exception e){}
+        	
+        	
+        	
+        	ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
+            Log.i("EpisodeDetailFragment", "Episode count: " + episodeList.size());
+            
         	ArrayList<String> newList = new ArrayList<String>();
-        	for (EpisodeItem episode : mItem.episodes) {
-                Log.i("PodcastDetail", "Adding episode for item: " + episode.name);
+        	for (EpisodeItem episode : episodeList) {
+                Log.i("EpisodeDetailFragment", "Adding episode for item: " + episode.name);
 				newList.add(episode.name);
-				newList.add("test");
+				//newList.add("test");
 			}
+        	
         	
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
         	        android.R.layout.simple_list_item_1, newList);
@@ -88,13 +100,14 @@ public class EpisodeDetailFragment extends Fragment {
             list.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					Log.i("", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
+					Log.i("EpisodeDetailFragment", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
 		            Intent detailIntent = new Intent(getActivity(), PodcastPlayerActivity.class);
 		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, id);
 		            startActivity(detailIntent);
 				}
 			});
-            Log.i("PodcastDetail", "Done creating detail view");
+			
+            Log.i("EpisodeDetailFragment", "Done creating detail view");
         }
 
         return rootView;
