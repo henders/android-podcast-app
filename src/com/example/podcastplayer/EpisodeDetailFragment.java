@@ -1,8 +1,6 @@
 package com.example.podcastplayer;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.podcastplayer.dummy.DummyContent;
 
@@ -46,26 +45,35 @@ public class EpisodeDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Show the Up button in the action bar.
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+    	String id = getArguments().getString(ARG_ITEM_ID);
+		Log.i("", "Loading episode list fragment for id: " + id);
+
+        if (id != null && !id.isEmpty()) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = DummyContent.ITEM_MAP.get(id);
+        }
+        else
+        {
+        	Toast.makeText(getActivity(), "No Podcast is currently selected, navigate back up.", 
+        			Toast.LENGTH_SHORT).show();
         }
     }
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_podcast_detail, container, false);
 
-        Log.i("EpisodeDetailFragment", "Creating detail view for item: " + mItem.toString());
-        Log.i("EpisodeDetailFragment", "URL: " + mItem.feedUrl.toString());
-        
         // Show the dummy content as text in a TextView.
         if (mItem != null) {        	
-        	
+            Log.i("EpisodeDetailFragment", "Creating detail view for item: " + mItem.toString());
+            Log.i("EpisodeDetailFragment", "URL: " + mItem.feedUrl.toString());
+                    	
         	//mItem.feedUrl
             Log.i("EpisodeDetailFragment", "Creating parser with URL: " + mItem.feedUrl);        	
         	Parser parser = new Parser(mItem.feedUrl);
@@ -79,8 +87,6 @@ public class EpisodeDetailFragment extends Fragment {
         			Thread.sleep(1000);
         		
         	}catch(Exception e){}
-        	
-        	
         	
         	ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
             Log.i("EpisodeDetailFragment", "Episode count: " + episodeList.size());
@@ -102,7 +108,8 @@ public class EpisodeDetailFragment extends Fragment {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Log.i("EpisodeDetailFragment", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
 		            Intent detailIntent = new Intent(getActivity(), PodcastPlayerActivity.class);
-		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, id);
+		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, mItem.id);
+		            detailIntent.putExtra(PodcastPlayerActivity.EPISODE_ID, id);
 		            startActivity(detailIntent);
 				}
 			});

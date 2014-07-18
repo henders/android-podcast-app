@@ -33,7 +33,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PodcastListActivity" />
         </activity>
-        <activity android:name="PodcastPlayerActivity" android:parentActivityName=".PodcastDetailActivity"></activity>
+        <activity android:name="PodcastPlayerActivity" android:parentActivityName=".EpisodeDetailActivity"></activity>
     </application>
 
 </manifest>
