@@ -15,8 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.podcastplayer.dummy.DummyContent;
-
 /**
  * A fragment representing a single Podcast detail screen.
  * This fragment is either contained in a {@link PodcastListActivity}
@@ -48,14 +46,14 @@ public class EpisodeDetailFragment extends Fragment {
         // Show the Up button in the action bar.
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
-    	String id = getArguments().getString(ARG_ITEM_ID);
+    	int id = getArguments().getInt(ARG_ITEM_ID, -1);
 		Log.i("", "Loading episode list fragment for id: " + id);
 
-        if (id != null && !id.isEmpty()) {
+        if (id >= 0) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(id);
+            mItem = PodcastManager.getPodcasts().get(id);
         }
         else
         {
@@ -108,7 +106,7 @@ public class EpisodeDetailFragment extends Fragment {
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Log.i("EpisodeDetailFragment", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
 		            Intent detailIntent = new Intent(getActivity(), PodcastPlayerActivity.class);
-		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, mItem.id);
+		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, position);
 		            detailIntent.putExtra(PodcastPlayerActivity.EPISODE_ID, id);
 		            startActivity(detailIntent);
 				}

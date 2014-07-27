@@ -6,16 +6,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,6 +51,8 @@ public class PodcastListActivity extends FragmentActivity
         setContentView(R.layout.activity_podcast_list);
 
     	Log.i("ListActivity", "OnCreate entered");
+        // Load in the podcasts from disk
+        PodcastManager.loadPodcastsFromFile(this);
 
         if (findViewById(R.id.podcast_detail_container) != null) {
             // The detail container view will be present only in the
@@ -69,10 +67,15 @@ public class PodcastListActivity extends FragmentActivity
                     .findFragmentById(R.id.podcast_list))
                     .setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+    	Log.i("ListActivity", "onSaveInstanceState entered");
+        // Save the current subscriptions to file before exiting app.
+        PodcastManager.savePodcastsToFile(this);	
+    }
+    
     public boolean onCreateOptionsMenu (Menu menu) {
     	Log.i("ListActivity", "Creating Menu....");
     	MenuInflater inflater = getMenuInflater();
@@ -82,22 +85,11 @@ public class PodcastListActivity extends FragmentActivity
     
     public boolean onOptionsItemSelected (MenuItem item) {
     	Log.i("ListActivity", "Selected menu item: " + item.toString());
-//    	AddRssDialogFragment rssDialog = new AddRssDialogFragment();
-//    	rssDialog.show(getFragmentManager(), "dialog");
-    	if (item.toString() == "Add RSS") {
+    	if (item.toString().equals("Add RSS")) {
         	addRSSMenuClicked();
-    	}
-    	else if (item.toString().equals("Play")) {
-    		playMenuClicked();
     	}
     	return true;
     }
-
-	private void playMenuClicked() {
-		Log.i("ListActivity", "Playing media....");
-		MediaPlayer player = MediaPlayer.create(getApplicationContext(), R.raw.test);
-		player.start();
-	}
 
 	private void addRSSMenuClicked() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -132,13 +124,13 @@ public class PodcastListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(int id) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(EpisodeDetailFragment.ARG_ITEM_ID, id);
+            arguments.putInt(EpisodeDetailFragment.ARG_ITEM_ID, id);
             EpisodeDetailFragment fragment = new EpisodeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -165,9 +157,6 @@ public class PodcastListActivity extends FragmentActivity
         		String url = urls[0];
     			Log.i("ListPodcast", "RSS url: " + url);
     			
-//    			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//    			StrictMode.setThreadPolicy(policy);
-    			
     			URL uri = new URL(url);
     			Log.i("ListPodcast", "created URL object");
     			URLConnection urlConnection = uri.openConnection();
@@ -183,22 +172,13 @@ public class PodcastListActivity extends FragmentActivity
     				in.close();
     			}
     		} catch (MalformedURLException e) {
-    			Toast.makeText(getApplicationContext(), "Invalid RSS URL given!", 2).show();
+    			Toast.makeText(getApplicationContext(), "Invalid RSS URL given!", Toast.LENGTH_LONG).show();
     			e.printStackTrace();
     		} catch (IOException e) {
-    			Toast.makeText(getApplicationContext(), "Failed to fetch the RSS feed!", 2).show();
+    			Toast.makeText(getApplicationContext(), "Failed to fetch the RSS feed!", Toast.LENGTH_LONG).show();
     			e.printStackTrace();
     		}
             return true;
         }
-
-        protected void onProgressUpdate(Integer... progress) {
-//            setProgressPercent(progress[0]);
-        }
-
-        protected void onPostExecute(Boolean result) {
-//            showDialog("Downloaded " + result + " bytes");
-        }
-    }
-    
+    }    
 }

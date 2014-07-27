@@ -37,12 +37,11 @@ public class EpisodeDetailActivity extends FragmentActivity {
         //
 		Log.i("", "Creating episode list...");
         if (savedInstanceState == null) {
-    		Log.i("", "Restoring from saved state...");
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(EpisodeDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(EpisodeDetailFragment.ARG_ITEM_ID));
+            int savedPosition = getIntent().getIntExtra(EpisodeDetailFragment.ARG_ITEM_ID, 0);
+            arguments.putInt(EpisodeDetailFragment.ARG_ITEM_ID, savedPosition);
             EpisodeDetailFragment fragment = new EpisodeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

@@ -1,7 +1,5 @@
 package com.example.podcastplayer;
 
-import com.example.podcastplayer.dummy.DummyContent;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,15 +21,15 @@ public class PodcastPlayerActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         
-    	String id = getIntent().getStringExtra(EpisodeDetailFragment.ARG_ITEM_ID);
+    	int id = getIntent().getIntExtra(EpisodeDetailFragment.ARG_ITEM_ID, -1);
     	episodeId = getIntent().getLongExtra(EPISODE_ID, 0);
 		Log.i("", "Loading episode list fragment for id: " + id + " and episode index: " + episodeId);
 
-        if (id != null && !id.isEmpty()) {
+        if (id >= 0) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(id);
+            mItem = PodcastManager.getPodcasts().get(id);
 
             Log.i("", "Starting video screen...");
             VideoView video = (VideoView) findViewById(R.id.videoView);
