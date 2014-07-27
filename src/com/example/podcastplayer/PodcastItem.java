@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class PodcastItem {
 	
 	public String id;
@@ -18,8 +20,13 @@ public class PodcastItem {
 	
 	public PodcastItem(String feedUrl) {
 		this.feedUrl = feedUrl;
+		episodes = new ArrayList<EpisodeItem>();
 	}
-	
+
+	public PodcastItem() {
+		episodes = new ArrayList<EpisodeItem>();
+	}
+
 	public PodcastItem(String id, String name, String feedUrl, String description) {
 		this.id = id;
 		this.name = name;
@@ -49,5 +56,20 @@ public class PodcastItem {
 		}
     	
     	return root;
+    }
+    
+    public static PodcastItem fromJSON(JSONObject json) {
+    	PodcastItem item = new PodcastItem();
+    	if (json != null) {
+        	item.id = json.optString("id");
+        	item.name = json.optString("name");
+        	item.feedUrl = json.optString("feedUrl");
+        	item.description = json.optString("description");
+    		item.lastUpdated = new Date(json.optLong("lastUpdated"));
+    	}
+    	else {
+    		Log.w("", "Can't create PodcastItem from null JSON obj");
+    	}
+    	return item;
     }
 }

@@ -34,7 +34,7 @@ public class EpisodeItem {
 		return root;
 	}
 	
-	public EpisodeItem fromJSON(JSONObject json) {
+	public static EpisodeItem fromJSON(JSONObject json) {
 		EpisodeItem item = new EpisodeItem();
 		
 		item.name = json.optString("name", "unknown");
