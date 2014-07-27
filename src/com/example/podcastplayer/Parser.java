@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParser;
@@ -26,6 +29,7 @@ public class Parser {
 
 	private String mUrl;
 	private String mStrXML;
+	private String mStrHTML;
 	public ArrayList<EpisodeItem> mEpisodeItems;
 	public AtomicInteger mState;
 	
@@ -37,19 +41,191 @@ public class Parser {
 
 	public void Parse() {
 		fetchEpisodesFromRSS();
-	} 	
+	} 		
 	
-    public Boolean fetchEpisodesFromRSS() {
-    	new ProcessRSSFeedTask().execute();
-    	return true;
-    }	
+	public String ParseHTML(String strURL)
+	{
+		StringBuffer text = new StringBuffer();
+		HttpURLConnection conn = null;
+		InputStreamReader in = null;
+		BufferedReader buff = null;
+
+		try {
+			URL page = new URL(
+                strURL);
+//URLEncoder.encode(someparameter); use when passing params that may contain symbols or spaces use URLEncoder to encode it and conver space to %20...etc other wise you will get a 404
+			conn = (HttpURLConnection) page.openConnection();
+			conn.connect();
+        /* use this if you need to
+        int responseCode = conn.getResponseCode();
+
+        if (responseCode == 401 || responseCode == 403) {
+            // Authorization Error
+            Log.e(tag, "Authorization Error");
+            throw new Exception("Authorization Error");
+        }
+
+        if (responseCode >= 500 && responseCode <= 504) {
+            // Server Error
+            Log.e(tag, "Internal Server Error");
+            throw new Exception("Internal Server Error");
+        }*/
+			in = new InputStreamReader((InputStream) conn.getContent());
+			buff = new BufferedReader(in);
+			String line = "anything";
+			while (line != null) {
+				line = buff.readLine();
+				String found = interpretHtml(line);
+				if(null != found)
+					return found; // comment the previous 2 lines and this one if u need to load the whole html document.
+				text.append(line + "\n");
+			}
+		} catch (Exception e) {
+			Log.e(/*Standards.tag*/
+					"Parser",
+                "Exception while getting html from website, exception: "
+                        + e.toString() + ", cause: " + e.getCause()
+                        + ", message: " + e.getMessage());
+		} finally {
+			if (null != buff) {
+				try {
+					buff.close();
+				} catch (IOException e1) {
+            }
+            buff = null;
+        }
+        if (null != in) {
+            try {
+                in.close();
+            } catch (IOException e1) {
+            }
+            in = null;
+        }
+        if (null != conn) {
+        	conn.disconnect();
+            conn = null;
+        }
+    	}
+    	if (text.toString().length() > 0) {
+    		return interpretHtml(text.toString()); // use this if you don't need to load the whole page.
+    	} else return null;
+	}
+
+	private String interpretHtml(String s) {
+		Log.i("Parser", "interpret: " + s);
+
+		if(s.contains("<a href=\"")){
+			//System.out.println("found link");
+			System.out.println("link length: " + s.length());
+			
+
+			//Pattern string = Pattern.compile("\".*?\"");
+
+
+			Pattern p = Pattern.compile("\"([^\"]*)\"");
+			Matcher m = p.matcher(s);
+			while (m.find()) {
+			  //System.out.println("Matched: " + m.group(1));
+			  if((m.group(1)).contains("mp3")){
+				  System.out.println("Matched: " + m.group(1));
+					return (m.group(1));
+			  }
+			}			
+			
+			//String[] strings = s.split("\""");
+			
+			/*for(String n : strings)
+			{
+				System.out.println("href contents: " + n);
+				if(n.contains("mp3"))
+					return n;
+			}*/
+		}
+			
+		//return s.substring(9, s.length() - 9);
+		return null;
+	}	
 	
+	
+    private String findMediaURL(String strURL) {
+    	BufferedReader reader = null;
+    	StringBuilder str = new StringBuilder();
+
+    	try {
+    		Log.i("Parser", "Opening URL: " + strURL);			
+   			URL url = new URL(strURL);
+
+    		Log.i("Parser", "Buffering URL: " + strURL);
+   			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+
+    		for (String line; (line = reader.readLine()) != null;) {
+   				str.append(line);
+   			}
+   			Log.i("Parser", "Done reading...");
+    			
+   			mStrHTML = new String(str);
+   			Log.i("Parser", "HTML: " + mStrHTML);
+   			
+   			//new DocumentParser(DTD.getDTD("html32"));
+   			
+   			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			XmlPullParser xpp = factory.newPullParser();
+		
+			xpp.setInput( new StringReader ( mStrHTML ) );
+			int eventType = xpp.getEventType();   			
+			
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				if(eventType == XmlPullParser.START_DOCUMENT) {
+					//System.out.println("Start document");
+				} else if(eventType == XmlPullParser.START_TAG) {
+					System.out.println("Start tag "+xpp.getName());
+				
+					if(new String("a").equals(xpp.getName())) {
+							System.out.println(xpp.getText());
+				   			Log.i("Parser", "HREF: " + xpp.getText());							
+					}
+				} else if(eventType == XmlPullParser.END_TAG) {
+					//System.out.println("End tag "+xpp.getName());
+				} else if(eventType == XmlPullParser.TEXT) {
+					//System.out.println("Text "+xpp.getText());
+				}
+				eventType = xpp.next();
+			}
+			System.out.println("End document");   			
+   			
+    	}
+   	    catch(Exception e)
+    	{
+    		Log.i("Parser", "Fatal error: " + e);
+    		e.printStackTrace();
+    	}
+    	finally
+    	{
+    		if(null != reader)
+    			try {
+    				reader.close();
+   				} catch (IOException e) {
+   					// TODO Auto-generated catch block
+    				e.printStackTrace(); 
+    			}   			
+    	}
+    	return null;
+    }
+
+        public Boolean fetchEpisodesFromRSS() {
+        	new ProcessRSSFeedTask().execute();
+        	return true;
+        }    	
+    	
     private class ProcessRSSFeedTask extends AsyncTask<String, Integer, Boolean> {
         protected Boolean doInBackground(String... urls) {
 
         	BufferedReader reader = null;
         	StringBuilder str = new StringBuilder();
 
+        	int count = 0;
+        	
         	try {
         		Log.i("Parser", "Opening URL: " + mUrl);			
        			URL url = new URL(mUrl);
@@ -75,7 +251,7 @@ public class Parser {
 
     			mEpisodeItems.clear();    			
     			
-    			while (eventType != XmlPullParser.END_DOCUMENT) {
+    			while (eventType != XmlPullParser.END_DOCUMENT && count < 4) {
     				if(eventType == XmlPullParser.START_DOCUMENT) {
     					//System.out.println("Start document");
     				} else if(eventType == XmlPullParser.START_TAG) {
@@ -108,7 +284,13 @@ public class Parser {
     								if(new String("link").equals(xpp.getName())) {
     									xpp.next();
     									if(null != xpp.getText())
+    									{
+    										// this gives us the url to an http doc we need to parse for the actual mp3, mp4 location
     										location = new String(xpp.getText());
+    										//location = findMediaURL(location);
+    										location = ParseHTML(location);
+    										System.out.println("New location: " + location);
+    									}
     									done = true;
     								}
     						}	    						
@@ -134,6 +316,7 @@ public class Parser {
     					
     						EpisodeItem ei = new EpisodeItem(name, description, location);
     						mEpisodeItems.add(ei);
+    						count++;
     					}
     				} else if(eventType == XmlPullParser.END_TAG) {
     					//System.out.println("End tag "+xpp.getName());

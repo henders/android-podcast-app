@@ -17,7 +17,7 @@ import android.view.MenuItem;
  * more than a {@link EpisodeDetailFragment}.
  */
 public class EpisodeDetailActivity extends FragmentActivity {
-
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

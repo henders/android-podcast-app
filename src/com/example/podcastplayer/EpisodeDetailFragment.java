@@ -27,10 +27,6 @@ public class EpisodeDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private PodcastItem mItem;
 
     /**
@@ -86,12 +82,18 @@ public class EpisodeDetailFragment extends Fragment {
         		
         	}catch(Exception e){}
         	
-        	ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
+            
+        	ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems;
+        	
             Log.i("EpisodeDetailFragment", "Episode count: " + episodeList.size());
             
         	ArrayList<String> newList = new ArrayList<String>();
         	for (EpisodeItem episode : episodeList) {
+            	mItem.episodes.add(episode);
                 Log.i("EpisodeDetailFragment", "Adding episode for item: " + episode.name);
+                Log.i("EpisodeDetailFragment", "description: " + episode.description);
+                Log.i("EpisodeDetailFragment", "path: " + episode.filePath);
+                
 				newList.add(episode.name);
 				//newList.add("test");
 			}

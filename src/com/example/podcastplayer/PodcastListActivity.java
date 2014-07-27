@@ -1,4 +1,4 @@
-package com.example.podcastplayer;
+ package com.example.podcastplayer;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -44,7 +44,8 @@ public class PodcastListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
-
+    private PodcastItem mItem;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +172,10 @@ public class PodcastListActivity extends FragmentActivity
     			finally {
     				in.close();
     			}
+    			
+    			
+    			//mItem.episodes.add(EpisodeItem item);
+    			
     		} catch (MalformedURLException e) {
     			Toast.makeText(getApplicationContext(), "Invalid RSS URL given!", Toast.LENGTH_LONG).show();
     			e.printStackTrace();

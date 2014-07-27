@@ -15,7 +15,8 @@ public class PodcastPlayerActivity extends FragmentActivity {
 	public static final String EPISODE_ID = "episode_id";
     private PodcastItem mItem;
     private long episodeId;
-
+    private EpisodeItem mEpisode;
+    
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,26 +24,35 @@ public class PodcastPlayerActivity extends FragmentActivity {
         
     	int id = getIntent().getIntExtra(EpisodeDetailFragment.ARG_ITEM_ID, -1);
     	episodeId = getIntent().getLongExtra(EPISODE_ID, 0);
-		Log.i("", "Loading episode list fragment for id: " + id + " and episode index: " + episodeId);
+		Log.i("PodcastPlayerActivity", "Loading episode list fragment for id: " + id + " and episode index: " + episodeId);
 
         if (id >= 0) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mItem = PodcastManager.getPodcasts().get(id);
-
-            Log.i("", "Starting video screen...");
+            
+            mEpisode = mItem.episodes.get((int) episodeId);
+            
+            
+            Log.i("PodcastPlayerActivity", "EpisodeItem: " + mEpisode.name);
+            Log.i("PodcastPlayerActivity", "EpisodeItem: " + mEpisode.filePath);
+            
+            Log.i("PodcastPlayerActivity", "Starting video screen...");
+            
             VideoView video = (VideoView) findViewById(R.id.videoView);
             MediaController controller = new MediaController(this);
             controller.setAnchorView(video);
-            Uri uri = Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+            Uri uri = Uri.parse(mEpisode.filePath);
+            
+//            Uri uri = Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
 //            Uri uri = Uri.parse("http://traffic.libsyn.com/woodtalk/WT_190.mp3");
             
             video.setMediaController(controller);
             video.setVideoURI(uri);
             video.start();
 //            controller.show(999000);
-            Log.i("", "Started video");
+            Log.i("PodcastPlayerActivity", "Started video");
 
         }
         else
@@ -64,7 +74,7 @@ public class PodcastPlayerActivity extends FragmentActivity {
     		//
     		// http://developer.android.com/design/patterns/navigation.html#up-vs-back
     		//
-    		Log.i("", "Navigating back up to episode list...");
+    		Log.i("PodcastPlayerActivity", "Navigating back up to episode list...");
             Intent detailIntent = new Intent(this, EpisodeDetailActivity.class);
             detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, mItem.id);
 
