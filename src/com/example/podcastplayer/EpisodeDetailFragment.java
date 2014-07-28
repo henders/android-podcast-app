@@ -28,7 +28,7 @@ public class EpisodeDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
     private PodcastItem mItem;
-
+    
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -68,7 +68,6 @@ public class EpisodeDetailFragment extends Fragment {
             Log.i("EpisodeDetailFragment", "Creating detail view for item: " + mItem.toString());
             Log.i("EpisodeDetailFragment", "URL: " + mItem.feedUrl.toString());
                     	
-        	//mItem.feedUrl
             Log.i("EpisodeDetailFragment", "Creating parser with URL: " + mItem.feedUrl);        	
         	Parser parser = new Parser(mItem.feedUrl);
 
@@ -82,22 +81,31 @@ public class EpisodeDetailFragment extends Fragment {
         		
         	}catch(Exception e){}
         	
-            
-        	ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems;
+
+        	int id = getArguments().getInt(ARG_ITEM_ID, -1);
+    		Log.i("EpisodeDetailFragment", "Loading episode list fragment for id: " + id);        	
         	
+            ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
+    		
             Log.i("EpisodeDetailFragment", "Episode count: " + episodeList.size());
+            Log.i("EpisodeDetailFragment", "Episode count before: " + PodcastManager.getPodcasts().get(id).episodes.size());
+            
+            PodcastManager.getPodcasts().get(id).episodes = new ArrayList<EpisodeItem>();
             
         	ArrayList<String> newList = new ArrayList<String>();
         	for (EpisodeItem episode : episodeList) {
-            	mItem.episodes.add(episode);
-                Log.i("EpisodeDetailFragment", "Adding episode for item: " + episode.name);
+        		
+
+        		PodcastManager.getPodcasts().get(id).episodes.add(episode);
+                
+            	Log.i("EpisodeDetailFragment", "Adding episode for item: " + episode.name);
                 Log.i("EpisodeDetailFragment", "description: " + episode.description);
                 Log.i("EpisodeDetailFragment", "path: " + episode.filePath);
                 
 				newList.add(episode.name);
-				//newList.add("test");
 			}
         	
+            Log.i("EpisodeDetailFragment", "Episode count after: " + PodcastManager.getPodcasts().get(id).episodes.size());         	
         	
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
         	        android.R.layout.simple_list_item_1, newList);

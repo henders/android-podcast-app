@@ -1,5 +1,7 @@
 package com.example.podcastplayer;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +15,8 @@ import android.widget.VideoView;
 public class PodcastPlayerActivity extends FragmentActivity {
     
 	public static final String EPISODE_ID = "episode_id";
-    private PodcastItem mItem;
     private long episodeId;
-    private EpisodeItem mEpisode;
+    private PodcastItem mItem;
     
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +31,34 @@ public class PodcastPlayerActivity extends FragmentActivity {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = PodcastManager.getPodcasts().get(id);
+        	
+        	List<PodcastItem> podcastItems = PodcastManager.getPodcasts();
+        	
+        	System.out.println("Got list of podcast items");
+        	
+        	PodcastItem podcastItem = podcastItems.get(id);
+        	
+        	System.out.println("Got podcast item");
+
+            Log.i("PodcastPlayerActivity", "Episode count: " + podcastItem.episodes.size());         	
+        	
+        	
+        	EpisodeItem episodeItem = podcastItem.episodes.get((int) episodeId);
+        	
+        	System.out.println("Got episode item");
+        	
+            //podcastItem = PodcastManager.getPodcasts().get(id);
+            //mEpisode = mItem.episodes.get((int) episodeId);
             
-            mEpisode = mItem.episodes.get((int) episodeId);
             
-            
-            Log.i("PodcastPlayerActivity", "EpisodeItem: " + mEpisode.name);
-            Log.i("PodcastPlayerActivity", "EpisodeItem: " + mEpisode.filePath);
-            
+            Log.i("PodcastPlayerActivity", "EpisodeItem: " + episodeItem.name);
+            Log.i("PodcastPlayerActivity", "EpisodeItem: " + episodeItem.filePath);
             Log.i("PodcastPlayerActivity", "Starting video screen...");
             
             VideoView video = (VideoView) findViewById(R.id.videoView);
             MediaController controller = new MediaController(this);
             controller.setAnchorView(video);
-            Uri uri = Uri.parse(mEpisode.filePath);
-            
-//            Uri uri = Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
-//            Uri uri = Uri.parse("http://traffic.libsyn.com/woodtalk/WT_190.mp3");
+            Uri uri = Uri.parse(episodeItem.filePath);
             
             video.setMediaController(controller);
             video.setVideoURI(uri);

@@ -28,7 +28,7 @@ public class PodcastManager {
 	public static List<PodcastItem> getPodcasts() {
 		if (mPodcasts != null) {
 			return mPodcasts;
-		}
+		}		
 		else {
 			return DummyContent.ITEMS;
 		}
@@ -83,7 +83,8 @@ public class PodcastManager {
 				if (!success) {
 					// Use Dummy data
 					Log.w("", "No podcast subscriptions found, using dummy data");
-					mPodcasts = DummyContent.ITEMS;
+					//mPodcasts = DummyContent.ITEMS;
+					mPodcasts = null;
 				}
 				return null;
 			}

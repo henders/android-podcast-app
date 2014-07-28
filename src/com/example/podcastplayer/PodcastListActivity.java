@@ -44,7 +44,6 @@ public class PodcastListActivity extends FragmentActivity
      * device.
      */
     private boolean mTwoPane;
-    private PodcastItem mItem;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

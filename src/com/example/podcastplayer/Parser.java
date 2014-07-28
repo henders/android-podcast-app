@@ -51,11 +51,14 @@ public class Parser {
 		BufferedReader buff = null;
 
 		try {
+			System.out.println("Connecting to HTML resource: " + strURL);
+			
 			URL page = new URL(
                 strURL);
 //URLEncoder.encode(someparameter); use when passing params that may contain symbols or spaces use URLEncoder to encode it and conver space to %20...etc other wise you will get a 404
 			conn = (HttpURLConnection) page.openConnection();
 			conn.connect();
+			
         /* use this if you need to
         int responseCode = conn.getResponseCode();
 
@@ -146,77 +149,10 @@ public class Parser {
 		return null;
 	}	
 	
-	
-    private String findMediaURL(String strURL) {
-    	BufferedReader reader = null;
-    	StringBuilder str = new StringBuilder();
-
-    	try {
-    		Log.i("Parser", "Opening URL: " + strURL);			
-   			URL url = new URL(strURL);
-
-    		Log.i("Parser", "Buffering URL: " + strURL);
-   			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-
-    		for (String line; (line = reader.readLine()) != null;) {
-   				str.append(line);
-   			}
-   			Log.i("Parser", "Done reading...");
-    			
-   			mStrHTML = new String(str);
-   			Log.i("Parser", "HTML: " + mStrHTML);
-   			
-   			//new DocumentParser(DTD.getDTD("html32"));
-   			
-   			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			factory.setNamespaceAware(false);
-			XmlPullParser xpp = factory.newPullParser();
-		
-			xpp.setInput( new StringReader ( mStrHTML ) );
-			int eventType = xpp.getEventType();   			
-			
-			while (eventType != XmlPullParser.END_DOCUMENT) {
-				if(eventType == XmlPullParser.START_DOCUMENT) {
-					//System.out.println("Start document");
-				} else if(eventType == XmlPullParser.START_TAG) {
-					System.out.println("Start tag "+xpp.getName());
-				
-					if(new String("a").equals(xpp.getName())) {
-							System.out.println(xpp.getText());
-				   			Log.i("Parser", "HREF: " + xpp.getText());							
-					}
-				} else if(eventType == XmlPullParser.END_TAG) {
-					//System.out.println("End tag "+xpp.getName());
-				} else if(eventType == XmlPullParser.TEXT) {
-					//System.out.println("Text "+xpp.getText());
-				}
-				eventType = xpp.next();
-			}
-			System.out.println("End document");   			
-   			
-    	}
-   	    catch(Exception e)
-    	{
-    		Log.i("Parser", "Fatal error: " + e);
-    		e.printStackTrace();
-    	}
-    	finally
-    	{
-    		if(null != reader)
-    			try {
-    				reader.close();
-   				} catch (IOException e) {
-   					// TODO Auto-generated catch block
-    				e.printStackTrace(); 
-    			}   			
-    	}
-    	return null;
-    }
-
-        public Boolean fetchEpisodesFromRSS() {
+    public Boolean fetchEpisodesFromRSS() {
         	new ProcessRSSFeedTask().execute();
-        	return true;
-        }    	
+        return true;
+    }    	
     	
     private class ProcessRSSFeedTask extends AsyncTask<String, Integer, Boolean> {
         protected Boolean doInBackground(String... urls) {
@@ -266,7 +202,7 @@ public class Parser {
     						// Add new episode item: Name, Description, Location
     						//<title>
     						//<description>
-    						//<guid>
+    						//<link>
     						while(false == done) {
     							xpp.next();
     							if(null != xpp.getName())						
@@ -285,11 +221,17 @@ public class Parser {
     									xpp.next();
     									if(null != xpp.getText())
     									{
-    										// this gives us the url to an http doc we need to parse for the actual mp3, mp4 location
+    										// this may give us the url to an http doc we need to parse for the actual mp3, mp4 location
+    										
     										location = new String(xpp.getText());
-    										//location = findMediaURL(location);
-    										location = ParseHTML(location);
-    										System.out.println("New location: " + location);
+
+    										System.out.println("Pre-parsed location: " + location);
+    										
+    										if(!location.contains("mp3")) {
+    											location = ParseHTML(location);
+    											System.out.println("New location: " + location);
+    										}
+    										System.out.println("Post-parsed location: " + location);
     									}
     									done = true;
     								}
