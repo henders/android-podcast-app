@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class PodcastManager {
+	private static final String TAG = PodcastManager.class.getSimpleName();
 	private static final String FILENAME = "subscriptions.json";
 	private static List<PodcastItem> mPodcasts;	
 	
@@ -41,7 +42,7 @@ public class PodcastManager {
 			protected Void doInBackground(Context... contexts) {
 				Boolean success = false;
 				try {
-			    	Log.i("PodcastManager", "Loading podcasts...");
+			    	Log.i(TAG, "Loading podcasts...");
 			    	mPodcasts = new ArrayList<PodcastItem>();
 			    	Context ctx = contexts[0];
 					InputStream inputStream = ctx.openFileInput(FILENAME);
@@ -57,26 +58,26 @@ public class PodcastManager {
 		                }
 		                inputStream.close();
 						String jsonString = new String(stringBuilder.toString());
-						Log.i("PodcastManager", "RSS JSON: " + jsonString);
+						Log.i(TAG, "RSS JSON: " + jsonString);
 						JSONArray jsonArray = new JSONArray(jsonString);
 						if (jsonArray.length() > 0) {
 							for (int i = 0; i < jsonArray.length(); ++i) {
 								JSONObject jsonObj = jsonArray.getJSONObject(i);
-								Log.i("PodcastManager", "Adding podcast: " + jsonObj.toString());
+								Log.i(TAG, "Adding podcast: " + jsonObj.toString());
 								PodcastItem item = PodcastItem.fromJSON(jsonObj);
 								mPodcasts.add(item);
 							}
 							success = true;
 						}
-				    	Log.i("PodcastManager", "Loaded podcasts");
+				    	Log.i(TAG, "Loaded podcasts");
 		            }
-		            Log.i("PodcastManager", "closing json file");
+		            Log.i(TAG, "closing json file");
 				} catch (FileNotFoundException e) {
-					Log.w("PodcastManager", "No podcast subscription file found");
+					Log.w(TAG, "No podcast subscription file found");
 				} catch (IOException e) {
-					Log.w("PodcastManager", "Error reading from subscription file: " + e.getMessage());
+					Log.w(TAG, "Error reading from subscription file: " + e.getMessage());
 				} catch (JSONException e) {
-					Log.w("PodcastManager", "Malformed JSON in subscription file: " + e.getMessage());
+					Log.w(TAG, "Malformed JSON in subscription file: " + e.getMessage());
 				}
 
 				if (!success) {
@@ -96,7 +97,7 @@ public class PodcastManager {
 	
 	public static Boolean savePodcastsToFile(Context ctx) {
 		Boolean success = false;
-        Log.i("PodcastManager", "Writing podcasts to file....");
+        Log.i(TAG, "Writing podcasts to file....");
 		try {
 			FileOutputStream out = ctx.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(out);
@@ -106,16 +107,16 @@ public class PodcastManager {
 			}
 			outputStreamWriter.write(jsonArray.toString());
 			outputStreamWriter.close();
-	        Log.i("PodcastManager", "Wrote podcasts to file: " + jsonArray.toString());
+	        Log.i(TAG, "Wrote podcasts to file: " + jsonArray.toString());
 	        success = true;
 		} catch (FileNotFoundException e) {
-	        Log.e("PodcastManager", "Couldn't open output file!");
+	        Log.e(TAG, "Couldn't open output file!");
 			e.printStackTrace();
 		} catch (IOException e) {
-	        Log.e("PodcastManager", "Failed to write the podcast subscriptions!");
+	        Log.e(TAG, "Failed to write the podcast subscriptions!");
 			e.printStackTrace();
 		} catch (JSONException e) {
-	        Log.e("PodcastManager", "Failed to serialize to JSON the podcast subscriptions!");
+	        Log.e(TAG, "Failed to serialize to JSON the podcast subscriptions!");
 			e.printStackTrace();
 		}
 

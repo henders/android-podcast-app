@@ -38,7 +38,7 @@ import android.widget.Toast;
  */
 public class PodcastListActivity extends FragmentActivity
         implements PodcastListFragment.Callbacks {
-
+	private static final String TAG = PodcastListActivity.class.getSimpleName();
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -50,7 +50,7 @@ public class PodcastListActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_podcast_list);
 
-    	Log.i("ListActivity", "OnCreate entered");
+    	Log.i(TAG, "OnCreate entered");
         // Load in the podcasts from disk
         PodcastManager.loadPodcastsFromFile(this);
 
@@ -71,20 +71,20 @@ public class PodcastListActivity extends FragmentActivity
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-    	Log.i("ListActivity", "onSaveInstanceState entered");
+    	Log.i(TAG, "onSaveInstanceState entered");
         // Save the current subscriptions to file before exiting app.
         PodcastManager.savePodcastsToFile(this);	
     }
     
     public boolean onCreateOptionsMenu (Menu menu) {
-    	Log.i("ListActivity", "Creating Menu....");
+    	Log.i(TAG, "Creating Menu....");
     	MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.list_menu, menu);
     	return super.onCreateOptionsMenu(menu);
     }
     
     public boolean onOptionsItemSelected (MenuItem item) {
-    	Log.i("ListActivity", "Selected menu item: " + item.toString());
+    	Log.i(TAG, "Selected menu item: " + item.toString());
     	if (item.toString().equals("Add RSS")) {
         	addRSSMenuClicked();
     	}
@@ -103,7 +103,7 @@ public class PodcastListActivity extends FragmentActivity
 
     	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
     		public void onClick(DialogInterface dialog, int whichButton) {
-    			Log.i("ListActivity", "RSS url: " + input.getText());
+    			Log.i(TAG, "RSS url: " + input.getText());
     			String url = input.getText().toString();
     			addNewPodcastFromRSS(url);
     			input.setText("");
@@ -155,18 +155,18 @@ public class PodcastListActivity extends FragmentActivity
         protected Boolean doInBackground(String... urls) {
         	try {
         		String url = urls[0];
-    			Log.i("ListPodcast", "RSS url: " + url);
+    			Log.i(TAG, "RSS url: " + url);
     			
     			URL uri = new URL(url);
-    			Log.i("ListPodcast", "created URL object");
+    			Log.i(TAG, "created URL object");
     			URLConnection urlConnection = uri.openConnection();
-    			Log.i("ListPodcast", "opened connection: ");
+    			Log.i(TAG, "opened connection: ");
     			
     			InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-    			Log.i("ListPodcast", "opened stream");
+    			Log.i(TAG, "opened stream");
     			try {
     				String stream = in.toString();
-    				Log.i("ListPodcast", "Got RSS feed: " + stream);
+    				Log.i(TAG, "Got RSS feed: " + stream);
     			}
     			finally {
     				in.close();

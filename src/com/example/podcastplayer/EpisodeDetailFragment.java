@@ -67,7 +67,7 @@ public class EpisodeDetailFragment extends Fragment {
         if (mItem != null) {        	
             Log.i("EpisodeDetailFragment", "Creating detail view for item: " + mItem.toString());
             Log.i("EpisodeDetailFragment", "URL: " + mItem.feedUrl.toString());
-                    	
+
             Log.i("EpisodeDetailFragment", "Creating parser with URL: " + mItem.feedUrl);        	
         	Parser parser = new Parser(mItem.feedUrl);
 
@@ -79,7 +79,7 @@ public class EpisodeDetailFragment extends Fragment {
         		while(0 == parser.mState.get())
         			Thread.sleep(1000);
         		
-        	}catch(Exception e){}
+        	} catch(Exception e){}
         	
 
         	int id = getArguments().getInt(ARG_ITEM_ID, -1);
@@ -94,8 +94,6 @@ public class EpisodeDetailFragment extends Fragment {
             
         	ArrayList<String> newList = new ArrayList<String>();
         	for (EpisodeItem episode : episodeList) {
-        		
-
         		PodcastManager.getPodcasts().get(id).episodes.add(episode);
                 
             	Log.i("EpisodeDetailFragment", "Adding episode for item: " + episode.name);
@@ -122,6 +120,7 @@ public class EpisodeDetailFragment extends Fragment {
 				}
 			});
 			
+            PodcastManager.savePodcastsToFile(getActivity());
             Log.i("EpisodeDetailFragment", "Done creating detail view");
         }
 

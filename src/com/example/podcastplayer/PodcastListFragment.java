@@ -1,6 +1,10 @@
 package com.example.podcastplayer;
 
+import com.example.podcastplayer.provider.PodcastProvider;
+
 import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -68,6 +72,11 @@ public class PodcastListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        String[] projection = new String[]{"_ID", "NAME"};
+//		String selection;
+//		String[] selectionArgs;
+//		String sortOrder;
+//		Cursor cursor = getActivity().getContentResolver().query(new Uri("com.example.podcastplayer.provider/podcasts"), projection , selection, selectionArgs, sortOrder);
         // TODO: replace with a real list adapter.
         setListAdapter(new ArrayAdapter<PodcastItem>(
                 getActivity(),
