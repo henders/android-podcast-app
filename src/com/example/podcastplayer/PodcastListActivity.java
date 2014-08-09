@@ -79,7 +79,7 @@ public class PodcastListActivity extends FragmentActivity
     public void onSaveInstanceState(Bundle savedInstanceState) {
     	Log.i(TAG, "onSaveInstanceState entered");
         // Save the current subscriptions to file before exiting app.
-        PodcastManager.savePodcastsToFile(this);	
+        //PodcastManager.savePodcastsToFile(this);	
     }
     
     public boolean onCreateOptionsMenu (Menu menu) {

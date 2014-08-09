@@ -17,7 +17,8 @@ public class PodcastPlayerActivity extends FragmentActivity {
 	public static final String EPISODE_ID = "episode_id";
     private long episodeId;
     private PodcastItem mItem;
-    
+	private static final String TAG = FragmentActivity.class.getSimpleName();
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,7 @@ public class PodcastPlayerActivity extends FragmentActivity {
         	
         	System.out.println("Got podcast item");
 
-            Log.i("PodcastPlayerActivity", "Episode count: " + podcastItem.episodes.size());         	
+            Log.i(TAG, "Episode count: " + podcastItem.episodes.size());         	
         	
         	
         	EpisodeItem episodeItem = podcastItem.episodes.get((int) episodeId);
@@ -51,9 +52,9 @@ public class PodcastPlayerActivity extends FragmentActivity {
             //mEpisode = mItem.episodes.get((int) episodeId);
             
             
-            Log.i("PodcastPlayerActivity", "EpisodeItem: " + episodeItem.name);
-            Log.i("PodcastPlayerActivity", "EpisodeItem: " + episodeItem.filePath);
-            Log.i("PodcastPlayerActivity", "Starting video screen...");
+            Log.i(TAG, "EpisodeItem: " + episodeItem.name);
+            Log.i(TAG, "EpisodeItem: " + episodeItem.filePath);
+            Log.i(TAG, "Starting video screen...");
             
             VideoView video = (VideoView) findViewById(R.id.videoView);
             MediaController controller = new MediaController(this);
@@ -64,7 +65,7 @@ public class PodcastPlayerActivity extends FragmentActivity {
             video.setVideoURI(uri);
             video.start();
 //            controller.show(999000);
-            Log.i("PodcastPlayerActivity", "Started video");
+            Log.i(TAG, "Started video");
 
         }
         else
@@ -86,7 +87,7 @@ public class PodcastPlayerActivity extends FragmentActivity {
     		//
     		// http://developer.android.com/design/patterns/navigation.html#up-vs-back
     		//
-    		Log.i("PodcastPlayerActivity", "Navigating back up to episode list...");
+    		Log.i(TAG, "Navigating back up to episode list...");
             Intent detailIntent = new Intent(this, EpisodeDetailActivity.class);
             detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, mItem.id);
 

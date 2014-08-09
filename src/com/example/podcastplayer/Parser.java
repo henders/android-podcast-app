@@ -22,6 +22,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 //import com.example.podcastplayer.Parser.ProcessRSSFeedTask;
 
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,7 +33,8 @@ public class Parser {
 	private String mStrHTML;
 	public ArrayList<EpisodeItem> mEpisodeItems;
 	public AtomicInteger mState;
-	
+	private static final String TAG = Parser.class.getSimpleName();
+		
 	public Parser(String strUrl) {
 		mUrl = new String(strUrl);
 		mEpisodeItems = new ArrayList<EpisodeItem>();
@@ -85,7 +87,7 @@ public class Parser {
 			}
 		} catch (Exception e) {
 			Log.e(/*Standards.tag*/
-					"Parser",
+					TAG,
                 "Exception while getting html from website, exception: "
                         + e.toString() + ", cause: " + e.getCause()
                         + ", message: " + e.getMessage());
@@ -163,19 +165,19 @@ public class Parser {
         	int count = 0;
         	
         	try {
-        		Log.i("Parser", "Opening URL: " + mUrl);			
+        		Log.i(TAG, "Opening URL: " + mUrl);			
        			URL url = new URL(mUrl);
 
-        		Log.i("Parser", "Buffering URL: " + mUrl);
+        		Log.i(TAG, "Buffering URL: " + mUrl);
        			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
 
         		for (String line; (line = reader.readLine()) != null;) {
        				str.append(line);
        			}
-       			Log.i("Parser", "Done reading...");
+       			Log.i(TAG, "Done reading...");
         			
        			mStrXML = new String(str);
-       			Log.i("Parser", "Hello: " + mStrXML);
+       			Log.i(TAG, "Hello: " + mStrXML);
 
 
     			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -252,9 +254,9 @@ public class Parser {
     						System.out.println("Hello: " + description);
     						System.out.println("Hello: " + location);
     					
-    						Log.i("Parser", "Hello: " + name);
-    						Log.i("Parser", "Hello: " + description);
-    						Log.i("Parser", "Hello: " + location);
+    						Log.i(TAG, "Hello: " + name);
+    						Log.i(TAG, "Hello: " + description);
+    						Log.i(TAG, "Hello: " + location);
     					
     						EpisodeItem ei = new EpisodeItem(name, description, location);
     						mEpisodeItems.add(ei);
@@ -271,7 +273,7 @@ public class Parser {
     		}
     		catch(Exception e)
     		{
-    			Log.i("Parser", "Fatal error: " + e);
+    			Log.i(TAG, "Fatal error: " + e);
     			e.printStackTrace();
     		}
     		finally

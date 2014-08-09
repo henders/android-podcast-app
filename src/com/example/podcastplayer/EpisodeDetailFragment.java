@@ -33,6 +33,7 @@ public class EpisodeDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
     private PodcastItem mItem;
+	private static final String TAG = EpisodeDetailFragment.class.getSimpleName();
 	
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,7 +49,7 @@ public class EpisodeDetailFragment extends Fragment {
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
     	int id = getArguments().getInt(ARG_ITEM_ID, -1);
-		Log.i("", "Loading episode list fragment for id: " + id);
+		Log.i(TAG, "Loading episode list fragment for id: " + id);
 
         if (id >= 0) {
             // Load the dummy content specified by the fragment
@@ -70,13 +71,13 @@ public class EpisodeDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {        	
-            Log.i("EpisodeDetailFragment", "Creating detail view for item: " + mItem.toString());
-            Log.i("EpisodeDetailFragment", "URL: " + mItem.feedUrl.toString());
+            Log.i(TAG, "Creating detail view for item: " + mItem.toString());
+            Log.i(TAG, "URL: " + mItem.feedUrl.toString());
 
-            Log.i("EpisodeDetailFragment", "Creating parser with URL: " + mItem.feedUrl);        	
+            Log.i(TAG, "Creating parser with URL: " + mItem.feedUrl);        	
         	Parser parser = new Parser(mItem.feedUrl);
 
-            Log.i("EpisodeDetailFragment", "Parsing feed...");         	
+            Log.i(TAG, "Parsing feed...");         	
         	parser.Parse();
         	
         	try{
@@ -88,12 +89,12 @@ public class EpisodeDetailFragment extends Fragment {
         	
 
         	int id = getArguments().getInt(ARG_ITEM_ID, -1);
-    		Log.i("EpisodeDetailFragment", "Loading episode list fragment for id: " + id);        	
+    		Log.i(TAG, "Loading episode list fragment for id: " + id);        	
         	
             ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
     		
-            Log.i("EpisodeDetailFragment", "Episode count: " + episodeList.size());
-            Log.i("EpisodeDetailFragment", "Episode count before: " + PodcastManager.getPodcasts().get(id).episodes.size());
+            Log.i(TAG, "Episode count: " + episodeList.size());
+            Log.i(TAG, "Episode count before: " + PodcastManager.getPodcasts().get(id).episodes.size());
             
             PodcastManager.getPodcasts().get(id).episodes = new ArrayList<EpisodeItem>();
             
@@ -101,14 +102,14 @@ public class EpisodeDetailFragment extends Fragment {
         	for (EpisodeItem episode : episodeList) {
         		PodcastManager.getPodcasts().get(id).episodes.add(episode);
                 
-            	Log.i("EpisodeDetailFragment", "Adding episode for item: " + episode.name);
-                Log.i("EpisodeDetailFragment", "description: " + episode.description);
-                Log.i("EpisodeDetailFragment", "path: " + episode.filePath);
+            	Log.i(TAG, "Adding episode for item: " + episode.name);
+                Log.i(TAG, "description: " + episode.description);
+                Log.i(TAG, "path: " + episode.filePath);
                 
 				newList.add(episode.name);
 			}
         	
-            Log.i("EpisodeDetailFragment", "Episode count after: " + PodcastManager.getPodcasts().get(id).episodes.size());         	
+            Log.i(TAG, "Episode count after: " + PodcastManager.getPodcasts().get(id).episodes.size());         	
         	
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
         	        android.R.layout.simple_list_item_1, newList);
@@ -117,7 +118,7 @@ public class EpisodeDetailFragment extends Fragment {
             list.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					Log.i("EpisodeDetailFragment", "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
+					Log.i(TAG, "Clicked on detail item: " + ((TextView) view).getText() + " - " + id);
 		            Intent detailIntent = new Intent(getActivity(), PodcastPlayerActivity.class);
 		            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, position);
 		            detailIntent.putExtra(PodcastPlayerActivity.EPISODE_ID, id);
@@ -125,8 +126,8 @@ public class EpisodeDetailFragment extends Fragment {
 				}
 			});
 			
-            PodcastManager.savePodcastsToFile(getActivity());
-            Log.i("EpisodeDetailFragment", "Done creating detail view");
+            //PodcastManager.savePodcastsToFile(getActivity());
+            Log.i(TAG, "Done creating detail view");
         }
 
         return rootView;

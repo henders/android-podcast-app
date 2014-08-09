@@ -24,6 +24,7 @@ public class EpisodeDetailActivity extends FragmentActivity {
 
 	//A ProgressDialog object
 	private ProgressDialog progressDialog;
+	private static final String TAG = EpisodeDetailActivity.class.getSimpleName();
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class EpisodeDetailActivity extends FragmentActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-		Log.i("", "Creating episode list...");
+		Log.i(TAG, "Creating episode list...");
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
@@ -54,7 +55,7 @@ public class EpisodeDetailActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.podcast_detail_container, fragment)
                     .commit();
-    		Log.i("", "Loaded episode list fragment");
+    		Log.i(TAG, "Loaded episode list fragment");
         }
         
     	//Initialize a LoadViewTask object and call the execute() method
