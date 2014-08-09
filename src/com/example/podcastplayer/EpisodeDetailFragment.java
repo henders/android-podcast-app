@@ -1,7 +1,12 @@
 package com.example.podcastplayer;
 
 import java.util.ArrayList;
+
+//import com.example.podcastplayer.LoadingScreenActivity.LoadViewTask;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -28,7 +33,7 @@ public class EpisodeDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
     private PodcastItem mItem;
-    
+	
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -57,7 +62,7 @@ public class EpisodeDetailFragment extends Fragment {
         			Toast.LENGTH_SHORT).show();
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -126,4 +131,9 @@ public class EpisodeDetailFragment extends Fragment {
 
         return rootView;
     }
+
+	public void setContentView(int fragmentPodcastDetail) {
+		// TODO Auto-generated method stub
+		
+	}
 }
