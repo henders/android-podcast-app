@@ -70,7 +70,8 @@ public class EpisodeDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_podcast_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {        	
+        if (mItem != null) {
+        	/*
             Log.i(TAG, "Creating detail view for item: " + mItem.toString());
             Log.i(TAG, "URL: " + mItem.feedUrl.toString());
 
@@ -91,17 +92,21 @@ public class EpisodeDetailFragment extends Fragment {
         	int id = getArguments().getInt(ARG_ITEM_ID, -1);
     		Log.i(TAG, "Loading episode list fragment for id: " + id);        	
         	
+        	
             ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
     		
             Log.i(TAG, "Episode count: " + episodeList.size());
             Log.i(TAG, "Episode count before: " + PodcastManager.getPodcasts().get(id).episodes.size());
             
+        	
             PodcastManager.getPodcasts().get(id).episodes = new ArrayList<EpisodeItem>();
+            */
+        	
+        	int id = getArguments().getInt(ARG_ITEM_ID, -1);
+    		Log.i(TAG, "Loading episode list fragment for id: " + id);        	
             
         	ArrayList<String> newList = new ArrayList<String>();
-        	for (EpisodeItem episode : episodeList) {
-        		PodcastManager.getPodcasts().get(id).episodes.add(episode);
-                
+        	for (EpisodeItem episode : PodcastManager.getPodcasts().get(id).episodes) {
             	Log.i(TAG, "Adding episode for item: " + episode.name);
                 Log.i(TAG, "description: " + episode.description);
                 Log.i(TAG, "path: " + episode.filePath);
@@ -112,7 +117,7 @@ public class EpisodeDetailFragment extends Fragment {
             Log.i(TAG, "Episode count after: " + PodcastManager.getPodcasts().get(id).episodes.size());         	
         	
         	ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
-        	        android.R.layout.simple_list_item_1, newList);
+        	        android.R.layout.simple_list_item_1, newList);   	
             ListView list = ((ListView) rootView.findViewById(R.id.episodeListView));
             list.setAdapter(adapter);
             list.setOnItemClickListener(new OnItemClickListener() {

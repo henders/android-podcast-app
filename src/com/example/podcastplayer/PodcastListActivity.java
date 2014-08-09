@@ -41,8 +41,10 @@ import android.widget.Toast;
  */
 public class PodcastListActivity extends FragmentActivity
         implements PodcastListFragment.Callbacks {
+	
 	private static final String TAG = PodcastListActivity.class.getSimpleName();
-    /**
+
+	/**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
