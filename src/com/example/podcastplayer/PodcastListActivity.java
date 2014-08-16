@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -22,6 +24,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.podcastplayer.EpisodeItem;
 
 /**
  * An activity representing a list of Podcasts. This activity
@@ -52,6 +55,7 @@ public class PodcastListActivity extends FragmentActivity
 
     //A ProgressDialog object
 	private ProgressDialog progressDialog;	
+	public AtomicInteger mState;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +80,14 @@ public class PodcastListActivity extends FragmentActivity
                     .setActivateOnItemClick(true);
         }
     }
-
+/*
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
     	Log.i(TAG, "onSaveInstanceState entered");
         // Save the current subscriptions to file before exiting app.
         //PodcastManager.savePodcastsToFile(this);	
     }
-    
+*/    
     public boolean onCreateOptionsMenu (Menu menu) {
     	Log.i(TAG, "Creating Menu....");
     	MenuInflater inflater = getMenuInflater();
@@ -133,34 +137,20 @@ public class PodcastListActivity extends FragmentActivity
      */
     @Override
     public void onItemSelected(int id) {
+    	mState = new AtomicInteger(0);
     	
     	//Initialize a LoadViewTask object and call the execute() method
-    	new LoadViewTask().execute();  
+    	LoadViewTask loadViewTask = new LoadViewTask();
+    	loadViewTask.mId = id;
     	
-        if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putInt(EpisodeDetailFragment.ARG_ITEM_ID, id);
-            EpisodeDetailFragment fragment = new EpisodeDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.podcast_detail_container, fragment)
-                    .commit();
-
-        } else {
-            // In single-pane mode, simply start the detail activity
-            // for the selected item ID.
-            Intent detailIntent = new Intent(this, EpisodeDetailActivity.class);
-            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);
-        }
+    	loadViewTask.execute();  
     }
 
-    //To use the AsyncTask, it must be subclassed
+    //To use the AsyncTask, it must be sub-classed
     private class LoadViewTask extends AsyncTask<Void, Integer, Void>
     {
+    	public int mId = -1;
+    	
     	//Before running code in the separate thread
 		@Override
 		protected void onPreExecute() 
@@ -174,45 +164,34 @@ public class PodcastListActivity extends FragmentActivity
 		//The code to be executed in a background thread.
 		@Override
 		protected Void doInBackground(Void... params) 
-		{
-			/* This is just a code that delays the thread execution 4 times, 
-			 * during 850 milliseconds and updates the current progress. This 
-			 * is where the code that is going to be executed on a background
-			 * thread must be placed. 
-			 */
-			try 
-			{
-				//Get the current thread's token
-				synchronized (this) 
-				{
-					//Initialize an integer (that will act as a counter) to zero
-					int counter = 0;
-					//While the counter is smaller than four
-					while(counter <= 4)
-					{
-						//Wait 850 milliseconds
-						this.wait(850);
-						//Increment the counter 
-						counter++;
-						//Set the current progress. 
-						//This value is going to be passed to the onProgressUpdate() method.
-						publishProgress(counter*25);
-					}
-				}
-			} 
-			catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-			return null;
-		}
+		{	
+		    PodcastItem mItem = PodcastManager.getPodcasts().get(mId);
+			
+            Log.i(TAG, "Creating detail view for item: " + mItem.toString());
+            Log.i(TAG, "URL: " + mItem.feedUrl.toString());
 
-		//Update the progress
-		@Override
-		protected void onProgressUpdate(Integer... values) 
-		{
-			//set the current progress of the progress dialog
-			progressDialog.setProgress(values[0]);
+            Log.i(TAG, "Creating parser with URL: " + mItem.feedUrl);        	
+        	Parser parser = new Parser(mItem.feedUrl);
+
+            Log.i(TAG, "Parsing feed...");         	
+        	parser.Parse();
+        	
+
+        	int id = mId;//getArguments().getInt(ARG_ITEM_ID, -1);
+    		Log.i(TAG, "Loading episode list fragment for id: " + id);        	
+        	
+    		PodcastManager.getPodcasts().get(id).episodes = parser.mEpisodeItems;
+    		
+            Log.i(TAG, "Episode count: " + PodcastManager.getPodcasts().get(id).episodes.size());        
+            
+            for(EpisodeItem item : PodcastManager.getPodcasts().get(id).episodes)
+            {
+            	Log.i(TAG,"Episode name: " + item.name);
+            }
+                    
+            mState.set(1); 
+            
+			return null;
 		}
 
 		//after executing the code in the thread
@@ -223,27 +202,33 @@ public class PodcastListActivity extends FragmentActivity
 			progressDialog.dismiss();
 			//initialize the View
 			//setContentView(R.layout.main);
-			setContentView(R.layout.activity_podcast_detail);
+			//setContentView(R.layout.activity_podcast_detail);
+			
+			//TODO using mId here will probably cause problems
+			
+	        if (mTwoPane) {
+	            // In two-pane mode, show the detail view in this activity by
+	            // adding or replacing the detail fragment using a
+	            // fragment transaction.
+	            Bundle arguments = new Bundle();
+	            arguments.putInt(EpisodeDetailFragment.ARG_ITEM_ID, mId);
+	            EpisodeDetailFragment fragment = new EpisodeDetailFragment();
+	            fragment.setArguments(arguments);
+	            getSupportFragmentManager().beginTransaction()
+	                    .replace(R.id.podcast_detail_container, fragment)
+	                    .commit();
+
+	        } else {
+	            // In single-pane mode, simply start the detail activity
+	            // for the selected item ID.
+	            Intent detailIntent = new Intent(PodcastListActivity.this, EpisodeDetailActivity.class);
+	            detailIntent.putExtra(EpisodeDetailFragment.ARG_ITEM_ID, mId);
+	            startActivity(detailIntent);
+	        }			
+			
 		} 	
     }    
- /*   
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-                //
-                NavUtils.navigateUpTo(this, new Intent(this, PodcastListActivity.class));
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }    
-*/    
+
     public Boolean addNewPodcastFromRSS(String url) {
     	new ProcessRSSFeedTask().execute(url);
     	return true;

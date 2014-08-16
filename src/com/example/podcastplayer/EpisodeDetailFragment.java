@@ -71,36 +71,6 @@ public class EpisodeDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-        	/*
-            Log.i(TAG, "Creating detail view for item: " + mItem.toString());
-            Log.i(TAG, "URL: " + mItem.feedUrl.toString());
-
-            Log.i(TAG, "Creating parser with URL: " + mItem.feedUrl);        	
-        	Parser parser = new Parser(mItem.feedUrl);
-
-            Log.i(TAG, "Parsing feed...");         	
-        	parser.Parse();
-        	
-        	try{
-        		// wait for the parsing thread
-        		while(0 == parser.mState.get())
-        			Thread.sleep(1000);
-        		
-        	} catch(Exception e){}
-        	
-
-        	int id = getArguments().getInt(ARG_ITEM_ID, -1);
-    		Log.i(TAG, "Loading episode list fragment for id: " + id);        	
-        	
-        	
-            ArrayList<EpisodeItem> episodeList = parser.mEpisodeItems; 
-    		
-            Log.i(TAG, "Episode count: " + episodeList.size());
-            Log.i(TAG, "Episode count before: " + PodcastManager.getPodcasts().get(id).episodes.size());
-            
-        	
-            PodcastManager.getPodcasts().get(id).episodes = new ArrayList<EpisodeItem>();
-            */
         	
         	int id = getArguments().getInt(ARG_ITEM_ID, -1);
     		Log.i(TAG, "Loading episode list fragment for id: " + id);        	

@@ -22,8 +22,6 @@ import android.view.MenuItem;
  */
 public class EpisodeDetailActivity extends FragmentActivity {
 
-	//A ProgressDialog object
-	private ProgressDialog progressDialog;
 	private static final String TAG = EpisodeDetailActivity.class.getSimpleName();
 	
     @Override
