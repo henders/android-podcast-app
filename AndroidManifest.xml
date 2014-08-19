@@ -34,6 +34,7 @@
                 android:value=".PodcastListActivity" />
         </activity>
         <activity android:name="PodcastPlayerActivity" android:parentActivityName=".EpisodeDetailActivity"></activity>
+        <provider android:name=".provider.PodcastProvider" android:description="@string/app_provider_desc" android:authorities="com.example.podcastplayer.provider" android:enabled="true" android:exported="false"></provider>
     </application>
 
 </manifest>

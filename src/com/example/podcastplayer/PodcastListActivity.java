@@ -63,8 +63,6 @@ public class PodcastListActivity extends FragmentActivity
         setContentView(R.layout.activity_podcast_list);
 
     	Log.i(TAG, "OnCreate entered");
-        // Load in the podcasts from disk
-        PodcastManager.loadPodcastsFromFile(this);
 
         if (findViewById(R.id.podcast_detail_container) != null) {
             // The detail container view will be present only in the
@@ -165,6 +163,11 @@ public class PodcastListActivity extends FragmentActivity
 		@Override
 		protected Void doInBackground(Void... params) 
 		{	
+			// Get the feedUrl for the parser to look up for selected item.
+			
+			
+			
+			
 		    PodcastItem mItem = PodcastManager.getPodcasts().get(mId);
 			
             Log.i(TAG, "Creating detail view for item: " + mItem.toString());

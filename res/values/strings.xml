@@ -3,5 +3,6 @@
 
     <string name="app_name">Podcasts</string>
     <string name="title_podcast_detail">Episodes</string>
+    <string name="app_provider_desc">Provides podcast subscription data.</string>
 
 </resources>

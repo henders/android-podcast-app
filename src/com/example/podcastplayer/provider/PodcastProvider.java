@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import com.example.podcastplayer.PodcastItem;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -24,10 +25,17 @@ import android.util.Log;
 
 public class PodcastProvider extends ContentProvider {
 	private static final String TAG = PodcastProvider.class.getSimpleName();
+	private static final String SCHEME = "content://";
+	private static final String AUTHORITY = "com.example.podcastplayer.provider";
+	private static final String BASE_PATH = "podcasts";
 	private final String FILENAME = "subscriptions.json";
 	private List<PodcastItem> mPodcasts;	
 	private Boolean mIsInitialized = false;
-	
+
+	public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + "/" + BASE_PATH);
+	public static final String CONTENT_EPISODE_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+			+ "/podcast";
+
 	public static final String FIELD_NAME = "NAME";
 	public static final String FIELD_FEEDURL = "FEEDURL";
 	public static final String FIELD_DESCRIPTION = "DESCRIPTION";
@@ -39,10 +47,10 @@ public class PodcastProvider extends ContentProvider {
 	private static final int PODCASTS_EPISODES_ID = 3;
 	private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
-		sUriMatcher.addURI("com.example.podcastplayer.provider", "/podcasts", PODCASTS);
-		sUriMatcher.addURI("com.example.podcastplayer.provider", "/podcasts/#", PODCASTS_ID);
-		sUriMatcher.addURI("com.example.podcastplayer.provider", "/podcasts/#/episodes", PODCASTS_EPISODES);
-		sUriMatcher.addURI("com.example.podcastplayer.provider", "/podcasts/#/episodes/#", PODCASTS_EPISODES_ID);
+		sUriMatcher.addURI("com.example.podcastplayer.provider", BASE_PATH, PODCASTS);
+		sUriMatcher.addURI("com.example.podcastplayer.provider", BASE_PATH + "/#", PODCASTS_ID);
+		sUriMatcher.addURI("com.example.podcastplayer.provider", BASE_PATH + "/#/episodes", PODCASTS_EPISODES);
+		sUriMatcher.addURI("com.example.podcastplayer.provider", BASE_PATH + "/#/episodes/#", PODCASTS_EPISODES_ID);
 	}
 	
 	@Override
@@ -55,10 +63,13 @@ public class PodcastProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
+		Log.i(TAG, "Begin query for podcasts: " + uri.toString());
+
 		// If the data hasn't already been loaded from file, then do so now
 		if (!mIsInitialized) {
 			mIsInitialized = loadData();
 		}
+
 		MatrixCursor cursor = new MatrixCursor(projection);
 		switch (sUriMatcher.match(uri)) {
 		case PODCASTS:

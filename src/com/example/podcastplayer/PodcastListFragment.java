@@ -4,13 +4,12 @@ import com.example.podcastplayer.provider.PodcastProvider;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 /**
  * A list fragment representing a list of Podcasts. This fragment
@@ -23,6 +22,8 @@ import android.widget.ListView;
  */
 public class PodcastListFragment extends ListFragment {
 
+	private static final String TAG = PodcastListFragment.class.getSimpleName();
+	   
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
@@ -40,8 +41,11 @@ public class PodcastListFragment extends ListFragment {
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
     
-	private static final String TAG = PodcastListFragment.class.getSimpleName();
-   
+	/**
+	 * Maintain a reference to our adapter cursor.
+	 */
+	private SimpleCursorAdapter mAdapter;
+	
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -75,17 +79,28 @@ public class PodcastListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        String[] projection = new String[]{"_ID", "NAME"};
-//		String selection;
-//		String[] selectionArgs;
-//		String sortOrder;
-//		Cursor cursor = getActivity().getContentResolver().query(new Uri("com.example.podcastplayer.provider/podcasts"), projection , selection, selectionArgs, sortOrder);
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<PodcastItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                PodcastManager.getPodcasts()));
+        String[] projection = {
+        		PodcastProvider.FIELD_ID, 
+        		PodcastProvider.FIELD_NAME
+        };
+		// Construct a URI that points to the content provider data table
+		Cursor cursor = getActivity().getContentResolver()
+				.query(PodcastProvider.CONTENT_URI, projection , null, null, null);
+		if (null == cursor) {
+			Log.i(TAG, "Failed to get cursor from the Provider.");
+		}
+		else {
+			Log.i(TAG, "Got cursor from the Provider.");
+		}
+		
+		String[] from = {PodcastProvider.FIELD_NAME};
+		int[] to = {android.R.id.text1};
+		mAdapter = new SimpleCursorAdapter(
+				getActivity(),
+				android.R.layout.simple_list_item_activated_1, 
+				cursor, 
+				from, to, 0);
+		setListAdapter(mAdapter);
     }
 
     @Override
