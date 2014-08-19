@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.podcastplayer.EpisodeItem;
+import com.example.podcastplayer.provider.PodcastProvider;
 
 /**
  * An activity representing a list of Podcasts. This activity
@@ -164,7 +166,8 @@ public class PodcastListActivity extends FragmentActivity
 		protected Void doInBackground(Void... params) 
 		{	
 			// Get the feedUrl for the parser to look up for selected item.
-			
+			Uri uri = Uri.parse(PodcastProvider.CONTENT_URI + "/" + mId);
+			String[] projection = {PodcastProvider.FIELD_FEEDURL};
 			
 			
 			
